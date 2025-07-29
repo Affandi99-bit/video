@@ -5,6 +5,11 @@
     <title>Harmoni Bintang</title>
     <link rel="icon" href="/icons/kemdikbud.png" type="image/x-icon" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      ::-webkit-scrollbar {
+        width: 0;
+      }
+    </style>
   </head>
   <body
     class="relative min-h-screen font-sans bg-cover bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-full before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
@@ -64,10 +69,7 @@
           </svg>
         </button>
 
-        <div
-          id="videoGrid"
-          class="grid grid-cols-3 sm:grid-cols-2 gap-5 my-8"
-        ></div>
+        <div id="videoGrid" class="grid grid-cols-3 gap-5 my-8"></div>
 
         <button
           class="absolute -top-12 right-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-right"
