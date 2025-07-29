@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   videoContainer.addEventListener("click", (e) => {
     const box = e.target.closest(".box");
     if (!box) return;
-    const videoSrc = box.dataset.video;
+    const videoSrc = "/video/" + box.dataset.video;
     videoPlayer.src = videoSrc;
     modal.classList.remove("hidden");
     videoPlayer.play();
