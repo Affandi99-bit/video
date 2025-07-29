@@ -4,57 +4,115 @@
     <meta charset="UTF-8" />
     <title>Harmoni Bintang</title>
     <link rel="icon" href="/icons/kemdikbud.png" type="image/x-icon" />
-    <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <div class="container">
-      <section class="header-section">
+  <body
+    class="relative min-h-screen font-sans bg-cover bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-full before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
+  >
+    <div class="w-full max-w-screen-xl mx-auto px-4">
+      <!-- Header Section -->
+      <section
+        class="flex flex-col items-center justify-center text-center gap-4 my-4"
+      >
         <!-- Header Logos -->
-        <div class="header">
-          <div class="header-logos">
+        <div class="w-full flex justify-between items-center flex-wrap gap-4">
+          <div class="flex gap-4 items-center">
             <img
-              class="kemendikbud"
               src="/icons/kemendikbud.svg"
               alt="Kemendikbud"
+              class="w-[200px] sm:w-[100px] h-auto"
             />
-            <img class="mitj" src="/icons/mitj.png" alt="MITJ" />
+            <img
+              src="/icons/mitj.png"
+              alt="MITJ"
+              class="w-[100px] sm:w-[50px] h-auto"
+            />
           </div>
-          <img class="merdeka" src="/icons/80.png" alt="80 Tahun" />
-        </div>
-        <!-- Title Section -->
-        <div class="title-section">
           <img
-            class="title-image"
+            src="/icons/80.png"
+            alt="80 Tahun"
+            class="w-[100px] sm:w-[50px] h-auto"
+          />
+        </div>
+
+        <!-- Title Section -->
+        <div class="flex flex-col items-center gap-2">
+          <img
             src="/icons/harmoni.png"
             alt="Harmoni Bintang"
+            class="max-h-[500px] sm:max-h-[300px] w-full object-contain"
           />
-          <h1>TV Galaksi Karya</h1>
+          <h1 class="text-4xl font-black text-[#d62828] drop-shadow-sm">
+            TV Galaksi Karya
+          </h1>
         </div>
       </section>
 
-      <!-- Grid Items -->
-      <div class="grid" id="wrapper"></div>
-      <!-- Footer -->
-      <div class="footer">
-        <div class="footer-icons">
-          <!-- <img src="/icons/footer1.png" alt="Hashtag" />
-          <img src="/icons/footer2.png" alt="Sekolah Ramah" /> -->
-          <img src="/icons/pendidikan.png" alt="pendidikan" />
-          <img src="/icons/ramah.png" alt="ramah" />
-        </div>
+      <!-- Grid Controls -->
+      <div class="relative">
+        <button
+          class="absolute top-1/2 left-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-left"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M15 18l-6-6 6-6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+
+        <div
+          id="videoGrid"
+          class="grid grid-cols-3 sm:grid-cols-2 gap-5 my-8"
+        ></div>
+
+        <button
+          class="absolute top-1/2 right-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-right"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M9 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
       </div>
+
+      <!-- Footer -->
+      <footer
+        class="flex flex-col items-center justify-center mt-12 mb-6 text-black text-lg relative z-0"
+      >
+        <div class="flex gap-5 mb-2">
+          <img
+            src="/icons/pendidikan.png"
+            alt="pendidikan"
+            class="h-24 object-contain"
+          />
+          <img src="/icons/ramah.png" alt="ramah" class="h-24 object-contain" />
+        </div>
+      </footer>
     </div>
 
     <!-- Video Modal -->
-    <div id="videoModal" class="modal hidden">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <video id="videoPlayer" controls></video>
+    <div
+      id="videoModal"
+      class="fixed inset-0 z-[999] bg-black/60 backdrop-blur-md hidden items-center justify-center"
+    >
+      <div class="bg-black p-5 rounded-lg relative w-[90%] max-w-[800px]">
+        <button
+          class="absolute -top-3 -right-3 bg-white text-black text-xl px-3 py-1 rounded-full cursor-pointer close"
+        >
+          &times;
+        </button>
+        <video id="videoPlayer" class="w-full rounded-lg" controls></video>
       </div>
     </div>
-
-    <button class="slide-left">&lt;</button>
-    <button class="slide-right">&gt;</button>
 
     <script src="/script.js"></script>
   </body>

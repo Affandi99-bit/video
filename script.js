@@ -2,53 +2,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("videoModal");
   const videoPlayer = document.getElementById("videoPlayer");
   const closeBtn = document.querySelector(".close");
-  const videoGrid = document.getElementById("videoGrid");
   const videoContainer = document.querySelector(".grid");
+  const prevBtn = document.querySelector("slide-left");
+  const nextBtn = document.querySelector("slide-right");
   const videoCount = 4;
   const groupSize = 9;
   const boxes = [];
 
   for (let i = 1; i <= videoCount; i++) {
     const box = document.createElement("div");
-    box.className = "box";
+    box.className =
+      "aspect-video bg-white rounded-lg flex items-center justify-center overflow-hidden transition-transform hover:scale-105 cursor-pointer";
     box.dataset.video = `video${i}.mp4`;
     box.innerHTML = `
-            <video
-              src="/video/video${i}.mp4"
-              poster="/thumbnail/video${i}.png"
-              preload="metadata"
-              muted
-              playsinline
-              style="
-                width: 100%;
-                object-fit: cover;
-                cursor: pointer;
-              "
-              onmouseover="this.play()"
-              onmouseout="this.pause(); this.currentTime=0;"
-              onerror="this.closest('.box').style.display='none';"
-            ></video>
-          `;
+  <video
+    src="/video/video${i}.mp4"
+    poster="/thumbnail/video${i}.png"
+    preload="metadata"
+    muted
+    playsinline
+    class="w-full h-full object-cover"
+    onmouseover="this.play()"
+    onmouseout="this.pause(); this.currentTime=0;"
+    onerror="this.closest('div').style.display='none';"
+  ></video>`;
     boxes.push(box);
   }
 
   let currentSlide = 0;
-
-  const prevBtn = document.createElement("button");
-  prevBtn.innerHTML = `
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-`;
-  prevBtn.className = "slide-left";
-
-  const nextBtn = document.createElement("button");
-  nextBtn.innerHTML = `
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-`;
-  nextBtn.className = "slide-right";
 
   function renderSlide(slideIdx) {
     videoContainer.innerHTML = "";
