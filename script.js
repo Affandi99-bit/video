@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const prevBtn = document.querySelector(".slide-left");
   const nextBtn = document.querySelector(".slide-right");
 
-  const videoCount = 20; // Change as needed
+  const videoCount = 20;
   const groupSize = 10;
   let currentSlide = 0;
 
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       box.innerHTML = `
               <video
                 src="/video/video${i}.mp4"
-                poster="/thumbnail/video${i}.png"
+                poster="/thumbnail/video${i}.webp"
                 preload="none"
                 muted
                 playsinline
