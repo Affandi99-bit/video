@@ -6,64 +6,101 @@ document.addEventListener("DOMContentLoaded", () => {
   const prevBtn = document.querySelector(".slide-left");
   const nextBtn = document.querySelector(".slide-right");
 
-  const videoCount = 9; // adjust to your total video files
-  const groupSize = 9; // videos per page
+  const videoCount = 20; // or however many videos you have
+  const groupSize = 10;
   let currentSlide = 0;
-  const boxes = [];
+  const slides = [];
 
-  // Generate video boxes
-  for (let i = 1; i <= videoCount; i++) {
-    const box = document.createElement("div");
-    box.className =
-      "box aspect-video bg-white rounded-lg flex items-center justify-center overflow-hidden transition-transform hover:scale-105 cursor-pointer";
-    box.dataset.video = `video${i}.mp4`;
+  for (let i = 0; i < Math.ceil(videoCount / groupSize); i++) {
+    const slide = document.createElement("div");
+    slide.className = "slide";
 
-    box.innerHTML = `
-      <video
-        src="/video/video${i}.mp4"
-        poster="/thumbnail/video${i}.png"
-        preload="metadata"
-        muted
-        playsinline
-        class="w-full h-full object-cover"
-        onmouseover="this.play()"
-        onmouseout="this.pause(); this.currentTime=0;"
-        onerror="this.closest('.box').style.display='none';"
-      ></video>
-    `;
+    for (let j = 0; j < groupSize; j++) {
+      const videoIndex = i * groupSize + j + 1;
+      if (videoIndex > videoCount) break;
 
-    boxes.push(box);
+      const box = document.createElement("div");
+      box.className = "box";
+      box.dataset.video = `video${videoIndex}.mp4`;
+      box.innerHTML = `
+        <video
+          src="/video/video${videoIndex}.mp4"
+          poster="/thumbnail/video${videoIndex}.png"
+          preload="metadata"
+          muted
+          playsinline
+          class="w-full h-full object-cover"
+          onmouseover="this.play()"
+          onmouseout="this.pause(); this.currentTime=0;"
+          onerror="this.closest('.box').style.display='none';"
+        ></video>
+      `;
+      slide.appendChild(box);
+    }
+
+    slides.push(slide);
   }
 
-  // Render videos by group
-  function renderSlide(slideIdx) {
-    videoContainer.innerHTML = "";
-    const start = slideIdx * groupSize;
-    const end = start + groupSize;
-    boxes.slice(start, end).forEach((box) => videoContainer.appendChild(box));
+  // Render all slides side by side
+  videoContainer.innerHTML = "";
+  slides.forEach((s) => videoContainer.appendChild(s));
 
-    prevBtn.disabled = slideIdx === 0;
-    nextBtn.disabled = end >= boxes.length;
+  function updateSlideTransform() {
+    const offset = -currentSlide * 100;
+    videoContainer.style.transform = `translateX(${offset}%)`;
+
+    prevBtn.disabled = currentSlide === 0;
+    nextBtn.disabled = currentSlide >= slides.length - 1;
   }
 
-  renderSlide(currentSlide);
+  updateSlideTransform();
 
-  // Slide button listeners
   prevBtn.addEventListener("click", () => {
     if (currentSlide > 0) {
       currentSlide--;
-      renderSlide(currentSlide);
+      updateSlideTransform();
     }
   });
 
   nextBtn.addEventListener("click", () => {
-    if ((currentSlide + 1) * groupSize < boxes.length) {
+    if (currentSlide < slides.length - 1) {
       currentSlide++;
-      renderSlide(currentSlide);
+      updateSlideTransform();
     }
   });
 
-  // Open modal on video click
+  // Swipe Support
+  let touchStartX = 0;
+  let touchEndX = 0;
+  let isSwiping = false;
+
+  videoContainer.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    isSwiping = false;
+  });
+
+  videoContainer.addEventListener("touchmove", (e) => {
+    const deltaX = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(deltaX) > 10) isSwiping = true;
+  });
+
+  videoContainer.addEventListener("touchend", (e) => {
+    if (!isSwiping) return;
+
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchEndX - touchStartX;
+    const threshold = 50;
+
+    if (diff < -threshold && currentSlide < slides.length - 1) {
+      currentSlide++;
+      updateSlideTransform();
+    } else if (diff > threshold && currentSlide > 0) {
+      currentSlide--;
+      updateSlideTransform();
+    }
+  });
+
+  // Modal logic
   videoContainer.addEventListener("click", (e) => {
     const box = e.target.closest(".box");
     if (!box) return;
@@ -75,16 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
     videoPlayer.play();
   });
 
-  // Close modal button
-  closeBtn.addEventListener("click", () => {
-    closeModal();
-  });
-
-  // Close modal on Esc key
+  closeBtn.addEventListener("click", closeModal);
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-      closeModal();
-    }
+    if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
   });
 
   function closeModal() {

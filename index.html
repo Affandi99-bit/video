@@ -9,97 +9,130 @@
       ::-webkit-scrollbar {
         width: 0;
       }
+      #videoGrid .box:nth-child(10) {
+        grid-column: 2 / 3;
+      }
+      .video-wrapper {
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+      }
+
+      #videoGrid {
+        display: flex;
+        transition: transform 0.4s ease;
+        will-change: transform;
+      }
+
+      .slide {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        width: 100%;
+        flex-shrink: 0;
+        padding: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .slide {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .box {
+        aspect-ratio: 16 / 9;
+        background: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        transition: transform 0.3s;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .box:hover {
+        transform: scale(1.05);
+      }
     </style>
   </head>
   <body
-    class="relative min-h-screen font-sans bg-cover bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-full before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
+    class="relative overflow-hidden min-h-screen font-sans bg-cover bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-screen before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
   >
-    <div class="w-full max-w-screen-xl mx-auto px-4">
-      <!-- Header Section -->
-      <section
-        class="flex flex-col items-center justify-center text-center gap-4 my-4"
-      >
-        <!-- Header Logos -->
-        <nav class="w-full flex justify-between items-center gap-4">
-          <div class="flex gap-4 items-center">
-            <img
-              src="/icons/kemendikbud.svg"
-              alt="Kemendikbud"
-              class="w-1/3 sm:w-[100px] h-auto"
-            />
-            <img
-              src="/icons/mitj.png"
-              alt="MITJ"
-              class="w-1/3 sm:w-[100px] h-auto"
-            />
-          </div>
-          <img
-            src="/icons/80.png"
-            alt="80 Tahun"
-            class="w-1/3 sm:w-[100px] h-auto"
-          />
-        </nav>
-
-        <!-- Title Section -->
-        <div class="flex flex-col items-center gap-2">
-          <img
-            src="/icons/harmoni.png"
-            alt="Harmoni Bintang"
-            class="max-h-[500px] sm:max-h-[300px] my-5 w-full object-contain"
-          />
-          <h1 class="text-4xl font-black text-[#d62828] drop-shadow-sm">
-            TV Galaksi Karya
-          </h1>
+    <!-- Header Section -->
+    <section
+      class="flex flex-col items-center justify-center text-center gap-4 my-4"
+    >
+      <!-- Header Logos -->
+      <nav class="w-full flex justify-between items-center gap-4">
+        <div class="w-1/2 flex gap-4 items-center">
+          <img src="/icons/kemendikbud.svg" alt="Kemendikbud" class="w-1/2" />
+          <img src="/icons/mitj.png" alt="MITJ" class="w-1/2" />
         </div>
-      </section>
+        <img src="/icons/80.png" alt="80 Tahun" class="w-1/3" />
+      </nav>
 
-      <!-- Grid Controls -->
-      <div class="relative">
-        <button
-          class="absolute -top-12 left-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-left"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M15 18l-6-6 6-6"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+      <!-- Title Section -->
+      <div class="flex flex-col items-center gap-2">
+        <img
+          src="/icons/harmoni.png"
+          alt="Harmoni Bintang"
+          class="max-h-[500px] sm:max-h-[300px] my-5 w-full object-contain"
+        />
+        <h1 class="text-4xl font-black text-[#d62828] drop-shadow-sm">
+          TV Galaksi Karya
+        </h1>
+      </div>
+    </section>
 
-        <div id="videoGrid" class="grid grid-cols-3 gap-5 my-8"></div>
+    <!-- Grid Controls -->
+    <div class="relative">
+      <button
+        class="absolute -top-12 left-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-left"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M15 18l-6-6 6-6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
 
-        <button
-          class="absolute -top-12 right-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-right"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M9 6l6 6-6 6"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+      <div class="video-wrapper my-8">
+        <div id="videoGrid"></div>
       </div>
 
-      <!-- Footer -->
-      <footer
-        class="flex flex-col items-center justify-center mt-12 mb-6 text-black text-lg relative z-0"
+      <button
+        class="absolute -top-12 right-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-right"
       >
-        <div class="flex gap-5 mb-2">
-          <img
-            src="/icons/pendidikan.png"
-            alt="pendidikan"
-            class="h-24 object-contain"
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M9 6l6 6-6 6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           />
-          <img src="/icons/ramah.png" alt="ramah" class="h-24 object-contain" />
-        </div>
-      </footer>
+        </svg>
+      </button>
     </div>
+
+    <!-- Footer -->
+    <footer
+      class="w-full flex flex-col items-center justify-center z-0 absolute bottom-0"
+    >
+      <div class="flex gap-5 mb-2">
+        <img
+          src="/icons/pendidikan.png"
+          alt="pendidikan"
+          class="h-40 object-contain"
+        />
+        <img src="/icons/ramah.png" alt="ramah" class="h-40 object-contain" />
+      </div>
+    </footer>
 
     <!-- Video Modal -->
     <div
