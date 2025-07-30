@@ -15,29 +15,36 @@
       body {
         width: 100%;
         height: 100%;
-        overflow: hidden; /* Prevent horizontal scroll */
+        overflow: hidden;
       }
+
       ::-webkit-scrollbar {
         width: 0;
       }
-      #videoGrid .box:nth-child(10) {
-        grid-column: 2 / 3;
-      }
+
       .video-wrapper {
         overflow: hidden;
         position: relative;
         width: 100%;
       }
-      #videoGrid {
-        display: grid;
-        width: 100%;
-        height: 100%;
-        place-content: center;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-        transition: all 0.3s ease;
+
+      #videoSlider {
+        display: flex;
+        transition: transform 0.4s ease-in-out;
+        will-change: transform;
       }
 
+      .slide {
+        min-width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        padding: 1rem;
+        box-sizing: border-box;
+      }
+      .slide .box:nth-child(10) {
+        grid-column: 2 / 3;
+      }
       .box {
         aspect-ratio: 16 / 9;
         background: white;
@@ -57,13 +64,12 @@
     </style>
   </head>
   <body
-    class="relative px-5 lg:overflow-scroll overflow-hidden min-h-screen w-full font-sans bg-cover bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-screen before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
+    class="relative px-5 min-h-screen w-full font-sans bg-cover bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-screen before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
   >
     <!-- Header Section -->
     <section
       class="flex flex-col items-center justify-center text-center gap-2"
     >
-      <!-- Header Logos -->
       <nav class="w-full flex justify-between items-center gap-4">
         <div class="w-1/2 sm:w-80 flex gap-4 items-center">
           <img src="/icons/kemendikbud.svg" alt="Kemendikbud" class="w-72" />
@@ -72,7 +78,6 @@
         <img src="/icons/80.webp" alt="80 Tahun" class="w-56" />
       </nav>
 
-      <!-- Title Section -->
       <div class="flex flex-col items-center gap-2 w-full">
         <img
           src="/icons/harmoni.webp"
@@ -85,42 +90,12 @@
       </div>
     </section>
 
-    <!-- Grid Controls -->
-    <div class="relative">
-      <!-- <button
-        class="absolute top-0 left-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-left"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M15 18l-6-6 6-6"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </button> -->
-
-      <div class="video-wrapper sm:my-10 h-full">
-        <div id="videoGrid"></div>
-      </div>
-
-      <!-- <button
-        class="absolute top-0 right-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-right"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M9 6l6 6-6 6"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </button> -->
+    <!-- Video Grid Carousel -->
+    <div class="video-wrapper sm:my-10 h-full">
+      <div id="videoSlider"></div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer Decorations -->
     <img
       src="/icons/right.png"
       class="object-contain h-72 absolute -left-2 -bottom-2 opacity-50"
@@ -132,6 +107,7 @@
       alt=""
     />
 
+    <!-- Footer Logos -->
     <footer
       class="w-full flex items-start justify-center gap-5 z-0 absolute bottom-2"
     >
@@ -142,7 +118,8 @@
       />
       <img src="/icons/ramah.webp" alt="ramah" class="h-40 object-contain" />
     </footer>
-    <!-- Video Modal -->
+
+    <!-- Modal -->
     <div
       id="videoModal"
       class="fixed inset-0 z-[999] bg-black/60 backdrop-blur-md hidden items-center justify-center"
@@ -157,6 +134,106 @@
       </div>
     </div>
 
-    <script src="/script.js"></script>
+    <!-- Script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("videoModal");
+        const videoPlayer = document.getElementById("videoPlayer");
+        const closeBtn = modal.querySelector(".close");
+        const slider = document.getElementById("videoSlider");
+
+        const videoCount = 20;
+        const groupSize = 10;
+        const totalSlides = Math.ceil(videoCount / groupSize);
+        let currentSlide = 0;
+
+        function renderSlides() {
+          slider.innerHTML = "";
+
+          for (let slideIndex = 0; slideIndex < totalSlides; slideIndex++) {
+            const slide = document.createElement("div");
+            slide.className = "slide";
+
+            const start = slideIndex * groupSize;
+            const end = start + groupSize;
+
+            for (let i = start + 1; i <= Math.min(end, videoCount); i++) {
+              const box = document.createElement("div");
+              box.className = "box";
+              box.dataset.video = `video${i}.mp4`;
+              box.innerHTML = `
+                <video
+                  src="/video/video${i}.mp4"
+                  poster="/thumbnail/video${i}.webp"
+                  preload="none"
+                  muted
+                  playsinline
+                  loading="lazy"
+                  class="w-full h-full object-cover"
+                  onerror="this.closest('.box').style.display='none';"
+                ></video>
+              `;
+              slide.appendChild(box);
+            }
+
+            slider.appendChild(slide);
+          }
+
+          updateSlidePosition();
+        }
+
+        function updateSlidePosition() {
+          slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        // Swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slider.addEventListener("touchstart", (e) => {
+          touchStartX = e.touches[0].clientX;
+        });
+
+        slider.addEventListener("touchend", (e) => {
+          touchEndX = e.changedTouches[0].clientX;
+          const diff = touchEndX - touchStartX;
+          const threshold = 50;
+
+          if (diff < -threshold && currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updateSlidePosition();
+          } else if (diff > threshold && currentSlide > 0) {
+            currentSlide--;
+            updateSlidePosition();
+          }
+        });
+
+        // Modal
+        slider.addEventListener("click", (e) => {
+          const box = e.target.closest(".box");
+          if (!box) return;
+          videoPlayer.src = "/video/" + box.dataset.video;
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+          videoPlayer.play();
+        });
+
+        closeBtn.addEventListener("click", closeModal);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !modal.classList.contains("hidden"))
+            closeModal();
+        });
+
+        function closeModal() {
+          modal.classList.remove("flex");
+          modal.classList.add("hidden");
+          videoPlayer.pause();
+          videoPlayer.currentTime = 0;
+          videoPlayer.removeAttribute("src");
+        }
+
+        renderSlides();
+      });
+    </script>
   </body>
 </html>

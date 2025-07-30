@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const videoPlayer = document.getElementById("videoPlayer");
   const closeBtn = modal.querySelector(".close");
   const videoContainer = document.getElementById("videoGrid");
-  const prevBtn = document.querySelector(".slide-left");
-  const nextBtn = document.querySelector(".slide-right");
 
   const videoCount = 20;
   const groupSize = 10;
@@ -33,38 +31,27 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
       videoContainer.appendChild(box);
     }
-
-    prevBtn.disabled = currentSlide === 0;
-    nextBtn.disabled = (currentSlide + 1) * groupSize >= videoCount;
   }
-
   renderSlide(currentSlide);
 
-  prevBtn.addEventListener("click", () => {
-    if (currentSlide > 0) {
-      currentSlide--;
-      renderSlide(currentSlide);
-    }
-  });
-
-  nextBtn.addEventListener("click", () => {
-    if ((currentSlide + 1) * groupSize < videoCount) {
-      currentSlide++;
-      renderSlide(currentSlide);
-    }
-  });
-
-  // Touch/swipe support
   let touchStartX = 0;
-  let touchEndX = 0;
+  let touchMoveX = 0;
+  let isSwiping = false;
 
   videoContainer.addEventListener("touchstart", (e) => {
-    touchStartX = e.changedTouches[0].screenX;
+    touchStartX = e.touches[0].clientX;
+    isSwiping = false;
   });
 
-  videoContainer.addEventListener("touchend", (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    const diff = touchEndX - touchStartX;
+  videoContainer.addEventListener("touchmove", (e) => {
+    touchMoveX = e.touches[0].clientX;
+    isSwiping = true;
+  });
+
+  videoContainer.addEventListener("touchend", () => {
+    if (!isSwiping) return;
+
+    const diff = touchMoveX - touchStartX;
     const threshold = 50;
 
     if (diff < -threshold && (currentSlide + 1) * groupSize < videoCount) {
@@ -74,6 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
       currentSlide--;
       renderSlide(currentSlide);
     }
+
+    // reset
+    touchStartX = 0;
+    touchMoveX = 0;
+    isSwiping = false;
   });
 
   // Open modal on click
