@@ -27,12 +27,6 @@
         overflow: hidden;
         position: relative;
         width: 100%;
-        height: calc(100vh - 400px);
-      }
-      @media (min-width: 768px) {
-        .video-wrapper {
-          height: 100%;
-        }
       }
       #videoGrid {
         display: grid;
@@ -107,7 +101,7 @@
         </svg>
       </button>
 
-      <div class="video-wrapper sm:my-1">
+      <div class="video-wrapper sm:my-1 h-[calc(100vh - 500px)] md:h-full">
         <div id="videoGrid"></div>
       </div>
 
