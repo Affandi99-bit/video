@@ -18,7 +18,11 @@
         width: 100%;
         height: calc(100vh - 400px);
       }
-
+      @media (min-width: 768px) {
+        .video-wrapper {
+          height: 100%;
+        }
+      }
       #videoGrid {
         display: grid;
         width: 100%;
@@ -48,7 +52,7 @@
     </style>
   </head>
   <body
-    class="relative lg:overflow-scroll overflow-hidden min-h-screen font-sans bg-cover bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-screen before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
+    class="relative px-5 lg:overflow-scroll overflow-hidden min-h-screen w-full font-sans bg-cover bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-screen before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
   >
     <!-- Header Section -->
     <section
@@ -124,7 +128,7 @@
     />
 
     <footer
-      class="w-full flex items-center justify-center gap-5 z-0 absolute bottom-0"
+      class="w-full flex items-start justify-center gap-5 z-0 absolute bottom-2"
     >
       <img
         src="/icons/pendidikan.webp"
