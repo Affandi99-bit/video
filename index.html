@@ -16,10 +16,14 @@
         overflow: hidden;
         position: relative;
         width: 100%;
+        height: calc(100vh - 400px);
       }
 
       #videoGrid {
         display: grid;
+        width: 100%;
+        height: 100%;
+        place-content: center;
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
         transition: all 0.3s ease;
@@ -75,7 +79,7 @@
     <!-- Grid Controls -->
     <div class="relative">
       <button
-        class="absolute -top-12 left-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-left"
+        class="absolute top-0 left-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-left"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path
@@ -93,7 +97,7 @@
       </div>
 
       <button
-        class="absolute -top-12 right-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-right"
+        class="absolute top-0 right-2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#d62828] text-white rounded-full z-10 slide-right"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path
@@ -108,8 +112,19 @@
     </div>
 
     <!-- Footer -->
+    <img
+      src="/icons/right.png"
+      class="object-contain h-72 absolute -left-2 -bottom-2 opacity-50"
+      alt=""
+    />
+    <img
+      src="/icons/left.png"
+      class="object-contain h-72 absolute -right-2 -bottom-2 opacity-50"
+      alt=""
+    />
+
     <footer
-      class="w-full flex items-center justify-center gap-5 z-0 absolute -bottom-5"
+      class="w-full flex items-center justify-center gap-5 z-0 absolute bottom-0"
     >
       <img
         src="/icons/pendidikan.webp"
@@ -118,7 +133,6 @@
       />
       <img src="/icons/ramah.webp" alt="ramah" class="h-40 object-contain" />
     </footer>
-
     <!-- Video Modal -->
     <div
       id="videoModal"
