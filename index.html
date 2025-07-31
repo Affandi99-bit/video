@@ -4,122 +4,45 @@
     <meta charset="UTF-8" />
     <title>Harmoni Bintang</title>
     <link rel="icon" href="/icons/kemdikbud.webp" type="image/x-icon" />
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      }
-
-      ::-webkit-scrollbar {
-        width: 0;
-      }
-
-      .video-wrapper {
-        overflow: hidden;
-        position: relative;
-        width: 100%;
-      }
-
-      #videoSlider {
-        display: flex;
-        transition: transform 0.4s ease-in-out;
-        will-change: transform;
-      }
-
-      .slide {
-        min-width: 100%;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-        padding: 1rem;
-        box-sizing: border-box;
-      }
-      .slide .box:nth-child(10) {
-        grid-column: 2 / 3;
-      }
-      .box {
-        aspect-ratio: 16 / 9;
-        background: white;
-        border-radius: 0.5rem;
-        border: 1px solid #d62828;
-        overflow: hidden;
-        transition: transform 0.3s;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .box:hover {
-        transform: scale(1.05);
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body
-    class="relative px-5 min-h-screen w-full font-sans bg-cover bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-screen before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
+    class="relative px-5 min-h-screen w-full font-sans bg-fixed bg-no-repeat bg-center before:content-[''] before:fixed before:top-0 before:left-0 before:w-full before:h-screen before:bg-[url('/background/bg.jpg')] before:bg-cover before:bg-center before:opacity-10 before:-z-10"
   >
-    <!-- Header Section -->
     <section
       class="flex flex-col items-center justify-center text-center gap-2"
     >
       <nav class="w-full flex justify-between items-center gap-4">
         <div class="w-1/2 sm:w-80 flex gap-4 items-center">
-          <img src="/icons/kemendikbud.svg" alt="Kemendikbud" class="w-72" />
-          <img src="/icons/mitj.webp" alt="MITJ" class="w-40" />
+          <img
+            src="/icons/kemendikbud.svg"
+            alt="Kemendikbud"
+            class="w-72"
+          /><img src="/icons/mitj.webp" alt="MITJ" class="w-40" />
         </div>
         <img src="/icons/80.webp" alt="80 Tahun" class="w-56" />
       </nav>
-
       <div class="flex flex-col items-center gap-2 w-full">
         <img
           src="/icons/harmoni.webp"
           alt="Harmoni Bintang"
           class="h-80 mb-16 w-full object-contain"
         />
-        <h1 class="text-7xl mb-10 font-black text-[#d62828] drop-shadow-sm">
+        <h1
+          class="text-5xl md:text-7xl mb-10 font-black text-[#d62828] drop-shadow-sm"
+        >
           TV Galaksi Karya
         </h1>
       </div>
     </section>
-
-    <!-- Video Grid Carousel -->
-    <div class="video-wrapper sm:my-10 h-full">
-      <div id="videoSlider"></div>
+    <div class="video-wrapper sm:my-10 h-full overflow-hidden relative w-full">
+      <div
+        id="videoSlider"
+        class="grid grid-cols-3 transition-transform duration-300 ease-in-out will-change-transform"
+      ></div>
     </div>
-
-    <!-- Footer Decorations -->
-    <img
-      src="/icons/right.png"
-      class="object-contain h-72 absolute -left-2 -bottom-2 opacity-50"
-      alt=""
-    />
-    <img
-      src="/icons/left.png"
-      class="object-contain h-72 absolute -right-2 -bottom-2 opacity-50"
-      alt=""
-    />
-
-    <!-- Footer Logos -->
-    <footer
-      class="w-full flex items-start justify-center gap-5 z-0 absolute bottom-2"
-    >
-      <img
-        src="/icons/pendidikan.webp"
-        alt="pendidikan"
-        class="h-40 object-contain"
-      />
-      <img src="/icons/ramah.webp" alt="ramah" class="h-40 object-contain" />
-    </footer>
-
-    <!-- Modal -->
     <div
       id="videoModal"
       class="fixed inset-0 z-[999] bg-black/60 backdrop-blur-md hidden items-center justify-center"
@@ -128,112 +51,28 @@
         <button
           class="absolute -top-3 -right-3 bg-white text-black text-xl px-3 py-1 rounded-full cursor-pointer close"
         >
-          &times;
-        </button>
-        <video id="videoPlayer" class="w-full rounded-lg" controls></video>
+          &times;</button
+        ><video id="videoPlayer" class="w-full rounded-lg" controls></video>
       </div>
     </div>
-
-    <!-- Script -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const modal = document.getElementById("videoModal");
-        const videoPlayer = document.getElementById("videoPlayer");
-        const closeBtn = modal.querySelector(".close");
-        const slider = document.getElementById("videoSlider");
-
-        const videoCount = 20;
-        const groupSize = 10;
-        const totalSlides = Math.ceil(videoCount / groupSize);
-        let currentSlide = 0;
-
-        function renderSlides() {
-          slider.innerHTML = "";
-
-          for (let slideIndex = 0; slideIndex < totalSlides; slideIndex++) {
-            const slide = document.createElement("div");
-            slide.className = "slide";
-
-            const start = slideIndex * groupSize;
-            const end = start + groupSize;
-
-            for (let i = start + 1; i <= Math.min(end, videoCount); i++) {
-              const box = document.createElement("div");
-              box.className = "box";
-              box.dataset.video = `video${i}.mp4`;
-              box.innerHTML = `
-                <video
-                  src="/video/video${i}.mp4"
-                  poster="/thumbnail/video${i}.webp"
-                  preload="none"
-                  muted
-                  playsinline
-                  loading="lazy"
-                  class="w-full h-full object-cover"
-                  onerror="this.closest('.box').style.display='none';"
-                ></video>
-              `;
-              slide.appendChild(box);
-            }
-
-            slider.appendChild(slide);
-          }
-
-          updateSlidePosition();
-        }
-
-        function updateSlidePosition() {
-          slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-        }
-
-        // Swipe support
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        slider.addEventListener("touchstart", (e) => {
-          touchStartX = e.touches[0].clientX;
-        });
-
-        slider.addEventListener("touchend", (e) => {
-          touchEndX = e.changedTouches[0].clientX;
-          const diff = touchEndX - touchStartX;
-          const threshold = 50;
-
-          if (diff < -threshold && currentSlide < totalSlides - 1) {
-            currentSlide++;
-            updateSlidePosition();
-          } else if (diff > threshold && currentSlide > 0) {
-            currentSlide--;
-            updateSlidePosition();
-          }
-        });
-
-        // Modal
-        slider.addEventListener("click", (e) => {
-          const box = e.target.closest(".box");
-          if (!box) return;
-          videoPlayer.src = "/video/" + box.dataset.video;
-          modal.classList.remove("hidden");
-          modal.classList.add("flex");
-          videoPlayer.play();
-        });
-
-        closeBtn.addEventListener("click", closeModal);
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && !modal.classList.contains("hidden"))
-            closeModal();
-        });
-
-        function closeModal() {
-          modal.classList.remove("flex");
-          modal.classList.add("hidden");
-          videoPlayer.pause();
-          videoPlayer.currentTime = 0;
-          videoPlayer.removeAttribute("src");
-        }
-
-        renderSlides();
-      });
-    </script>
+    <img
+      src="/icons/right.png"
+      class="object-contain h-72 absolute -left-2 -bottom-2 opacity-50"
+      alt
+    /><img
+      src="/icons/left.png"
+      class="object-contain h-72 absolute -right-2 -bottom-2 opacity-50"
+      alt
+    />
+    <footer
+      class="w-full flex items-start justify-center gap-5 z-0 absolute bottom-2"
+    >
+      <img
+        src="/icons/pendidikan.webp"
+        alt="pendidikan"
+        class="h-40 object-contain"
+      /><img src="/icons/ramah.webp" alt="ramah" class="h-40 object-contain" />
+    </footer>
+    <script src="script.js"></script>
   </body>
 </html>
